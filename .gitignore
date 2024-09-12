@@ -1,3 +1,4 @@
 source_documents
 venv
 __pycache__
+*.db
