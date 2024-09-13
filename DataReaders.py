@@ -14,7 +14,12 @@ class DataReader:
         data = opx.load_workbook(self.file_path)
         sheet = data.active
 
+        print(f'Reading data from {self.file_path}...')
+        progress = 0
+        complete = sheet.max_row
         for row in sheet.rows:
+            progress += 1
+            print(f"Progress: {'█'*(progress//(complete // 10))}{' '*(10-progress//(complete // 10))} {progress}/{complete}", end="\r")
             data_row = []
             for cell in row:
                 if cell.column in self.columns:
@@ -25,6 +30,7 @@ class DataReader:
 
             self.data.append(data_row)
         
+        print('Data read complete.\n')
         return self.data
     
 
@@ -37,12 +43,19 @@ class ReaderMapper(DataReader):
     def map_data(self) -> list:
         readers = []
 
+        print('Mapping data...')
+
+        progress = 0
+        complete = len(self.data)
         for row in self.data:
+            progress += 1
+            print(f"Progress: {'█'*(progress//(complete // 10))}{' '*(10-progress//(complete // 10))} {progress}/{complete}", end="\r")            
             reader = Reader(reader_number=row[0],
                             location_blueprint=change_string_format(row[1]),
                             location_name=row[2])
             readers.append(reader)
 
+        print('Data mapped.\n')
         return readers
 
     def get_readers(self):
@@ -57,14 +70,21 @@ class PersonMapper(DataReader):
     def map_data(self) -> list:
         people = []
 
+        print('Mapping data...')
+
+        progress = 0
+        complete = len(self.data)
         for row in self.data:
-            person = Person(person_number=int(row[0]),
+            progress += 1
+            print(f"Progress: {'█'*(progress//(complete // 10))}{' '*(10-progress//(complete // 10))} {progress}/{complete}", end="\r")
+            person = Person(person_number=row[0],
                             first_name=row[3],
                             last_name=row[2],
                             card_number=row[4],
                             email=row[1])
             people.append(person)
 
+        print('Data mapped.\n')
         return people
 
     def get_people(self):
@@ -89,11 +109,21 @@ class AuthorizationMapper(DataReader):
 
     def map_data(self) -> list:
         authorizations = []
+        print('Mapping data...')
 
+        progress = 0
+        complete = len(self.data)
         for row in self.data:
+            progress += 1
+            print(f"Progress: {'█'*(progress//(complete // 10))}{' '*(10-progress//(complete // 10))} {progress}/{complete}", end="\r")
             for reader in self.readers:
                 if reader.location_blueprint == row[3] and reader.location_blueprint is not None:
-                    reader.location_hospital = row[3]
+                    reader.location_hospital = row[0]
+                    if row[2] is not None:
+                        reader.location_name = f'{row[1]} ({row[2]})'
+                    else:
+                        reader.location_name = row[1]
+                        
                     personel = str(row[4]).casefold().split(), str(row[5]).casefold().split()
 
                     for person in personel:
@@ -102,7 +132,8 @@ class AuthorizationMapper(DataReader):
                                 # print(set((p.first_name.casefold(), p.last_name.casefold())), set(person))
                                 if set((p.first_name.casefold(), p.last_name.casefold())) == set(person):
                                     reader.add_person(p)
-                                    
+
+        print('Data mapped.\n')
         return self.readers
 
     
