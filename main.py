@@ -2,33 +2,48 @@ from DataReaders import ReaderMapper, PersonMapper, AuthorizationMapper
 from Database import Database
 from Person import Person
 from Reader import Reader
+from ExportData import ExportData
+from sqlite3 import IntegrityError
 
 
 if __name__ == '__main__':
     reader_mapper = ReaderMapper('source_documents/export_readers.xlsx')
     readers = reader_mapper.get_readers()
-    # print(readers)
 
     person_mapper = PersonMapper('source_documents/export_employees.xlsx')
     personel = person_mapper.get_people()
-    # print(personel)
 
-    authorization_mapper = AuthorizationMapper('source_documents/Export.xlsx', readers=readers, personel=personel)
+    authorization_mapper = AuthorizationMapper('source_documents/export_efas.xlsx', readers=readers, personel=personel)
     authorized_readers = authorization_mapper.get_authorizations()
-
-    for reader in authorized_readers:
-        print(reader.reader_number, reader.location_blueprint, reader.location_hospital, [str(i) for i in reader.authorized_personel])
         
-    print(len(authorized_readers))
+    print(f'Found {len(authorized_readers)} readers...')
 
     db = Database('test.db')
-    for person in personel:
-        db.insert_person(person)
+
+    print('Building database...')
+    progress = 0
+    complete = len(readers)
     for reader in readers:
-        db.insert_reader(reader)
+        progress += 1
+        print(f"Progress: {'█'*(progress//(complete // 10))}{' '*(10-progress//(complete // 10))} {progress}/{complete}", end="\r")
+
+        try:
+            db.insert_reader(reader)
+        except IntegrityError:
+            # print(f'Reader already exists in database. {reader}')
+            pass
+        
         for person in reader.authorized_personel:
+            try:
+                db.insert_person(person)
+            except IntegrityError:
+                # print(f'Person already exists in database. {person}')
+                pass
+
             db.insert_authorization(person, reader)
+    
+    print('Database built.\n')
 
-
-
+    export = ExportData(db)
+    export.export_authorizations()
     
