@@ -14,21 +14,21 @@ class Database:
 
     def create_tables(self):
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS people
-                            (person_number INTEGER PRIMARY KEY,
+                            (person_number TEXT PRIMARY KEY,
                             first_name TEXT,
                             last_name TEXT,
                             card_number TEXT,
                             email TEXT)''')
 
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS readers
-                            (reader_number INTEGER PRIMARY KEY,
+                            (reader_number TEXT PRIMARY KEY,
                             location_blueprint TEXT,
                             location_hospital TEXT,
                             location_name TEXT)''')
 
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS authorizations
-                            (person_number INTEGER,
-                            reader_number INTEGER,
+                            (person_number TEXT,
+                            reader_number TEXT,
                             FOREIGN KEY(person_number) REFERENCES people(person_number),
                             FOREIGN KEY(reader_number) REFERENCES readers(reader_number))''')
 
@@ -67,6 +67,16 @@ class Database:
         self.cursor.execute('''SELECT * FROM authorizations''')
         authorizations = self.cursor.fetchall()
         return authorizations
+    
+    def select_person(self, person_number):
+        self.cursor.execute('''SELECT * FROM people WHERE person_number = ?''', (person_number,))
+        person = self.cursor.fetchone()
+        return person
+
+    def select_reader(self, reader_number):
+        self.cursor.execute('''SELECT * FROM readers WHERE reader_number = ?''', (reader_number,))
+        reader = self.cursor.fetchone()
+        return reader
 
     def close(self):
         self.conn.close()
