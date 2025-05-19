@@ -19,13 +19,13 @@ if __name__ == '__main__':
     person_mapper = PersonMapper('source_documents/export_employees.xlsx')
     personel = person_mapper.get_people()
 
-    authorization_mapper = AuthorizationMapper('source_documents/efas19052025.xlsx', readers=readers, personel=personel)
+    authorization_mapper = AuthorizationMapper('source_documents/export_efas.xlsx', readers=readers, personel=personel)
     authorized_readers = authorization_mapper.get_authorizations()
 
         
     print(f'Found {len(authorized_readers)} readers...')
 
-    db = Database('test_19052025.db')
+    db = Database('database.db')
 
     print('Building database...')
     progress = 0
