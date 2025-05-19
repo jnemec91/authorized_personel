@@ -24,7 +24,8 @@ class Database:
                             (reader_number TEXT PRIMARY KEY,
                             location_blueprint TEXT,
                             location_hospital TEXT,
-                            location_name TEXT)''')
+                            location_name TEXT,
+                            abi_location TEXT)''')
 
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS authorizations
                             (person_number TEXT,
@@ -41,9 +42,9 @@ class Database:
 
     def insert_reader(self, reader: Reader):
         self.cursor.execute('''INSERT INTO readers
-                            (reader_number, location_blueprint, location_hospital, location_name)
-                            VALUES (?, ?, ?, ?)''',
-                            (reader.reader_number, reader.location_blueprint, reader.location_hospital, reader.location_name))
+                            (reader_number, location_blueprint, location_hospital, location_name, abi_location)
+                            VALUES (?, ?, ?, ?, ?)''',
+                            (reader.reader_number, reader.location_blueprint, reader.location_hospital, reader.location_name, reader.abi_location))
         self.conn.commit()
 
     def insert_authorization(self, person: Person, reader: Reader):
