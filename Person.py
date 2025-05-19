@@ -1,7 +1,7 @@
 
 class Person:
     def __init__(self,
-                 person_number: int,
+                 person_number: str,
                  first_name: str = None,
                  last_name: str = None,
                  card_number: str = None,
