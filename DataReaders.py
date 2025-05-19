@@ -50,9 +50,10 @@ class ReaderMapper(DataReader):
         for row in self.data:
             progress += 1
             print(f"Progress: {'█'*(progress//(complete // 10))}{' '*(10-progress//(complete // 10))} {progress}/{complete}", end="\r")            
-            reader = Reader(reader_number=row[0],
+            reader = Reader(reader_number=str(row[0]),
                             location_blueprint=change_string_format(row[1]),
                             location_name=row[2])
+            reader.format_number()
             readers.append(reader)
 
         print('Data mapped.\n')
@@ -117,13 +118,12 @@ class AuthorizationMapper(DataReader):
             progress += 1
             print(f"Progress: {'█'*(progress//(complete // 10))}{' '*(10-progress//(complete // 10))} {progress}/{complete}", end="\r")
             for reader in self.readers:
-                if reader.location_blueprint == row[3] and reader.location_blueprint is not None:
-                    reader.location_hospital = row[0]
+                if str(reader.location_blueprint).strip() == str(row[3]).strip() and reader.location_blueprint is not None:
+                    reader.location_hospital = str(row[0])
                     if row[2] is not None:
                         reader.location_name = f'{row[1]} ({row[2]})'
                     else:
                         reader.location_name = row[1]
-                        
                     personel = str(row[4]).casefold().split(), str(row[5]).casefold().split()
 
                     for person in personel:
@@ -139,4 +139,63 @@ class AuthorizationMapper(DataReader):
     
     def get_authorizations(self):
         return self.map_data()
+    
 
+class ABILocationMapper(DataReader):
+    def __init__(self, file_path, readers, columns=[2,5]) -> None:
+        super().__init__(file_path, columns)
+        self.read_data()
+        self.readers = readers
+    
+    def map_data(self) -> list:
+        print('Mapping data...')
+        progress = 0
+        complete = len(self.data)
+        for row in self.data:
+            progress += 1
+            print(f"Progress: {'█'*(progress//(complete // 10))}{' '*(10-progress//(complete // 10))} {progress}/{complete}", end="\r")
+            for reader in self.readers:
+                if int(reader.reader_number) == int(row[0]):
+                    reader.abi_location = row[1]
+
+        print('Data mapped.\n')
+        return self.readers
+
+    def get_readers(self):
+        return self.map_data()
+    
+
+class VelinMapper(DataReader):
+    def __init__(self, file_path, readers, columns=[2]) -> None:
+        super().__init__(file_path, columns)
+        self.read_data()
+        self.readers = readers
+
+    def map_data(self) -> list:
+        print('Mapping data...')
+        progress = 0
+        complete = len(self.data)
+        for row in self.data:
+            reader_found = False
+            # add readers that are not in authorizations
+            progress += 1
+            print(f"Progress: {'█'*(progress//(complete // 10))}{' '*(10-progress//(complete // 10))} {progress}/{complete}", end="\r")
+
+            if len(row[0]) < 5:
+                row[0] = f'0{row[0]}'
+            
+            for reader in self.readers:
+                if int(reader.reader_number) == int(row[0]):
+                    reader_found = True
+                    break
+            
+            if not reader_found:
+                reader = Reader(reader_number=row[0])
+                self.readers.append(reader)
+                    
+
+        print('Data mapped.\n')
+        return self.readers
+
+    def get_readers(self):
+        return self.map_data()
