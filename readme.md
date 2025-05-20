@@ -39,7 +39,7 @@ pip install -r requirements.txt
     Export from employee database
     - columns must not have no names on first line
     - order of columns:
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`icp`|`email`|`last name`|`first name`|`title`|`card number`
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`icp`|`email`|`jmeno`|`prijmeni`|`titul`|`cislokarty`
 
 4. export_efas.xlsx
     Export from database of rooms
