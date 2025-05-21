@@ -21,8 +21,8 @@ class Person:
         self.card_number = card_number
         self.email = email
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.person_number} - {self.first_name} {self.last_name}'
 
-    def __repr__(self):
+    def __repr__(self -> str):
         return f'Person:{self.person_number}'
