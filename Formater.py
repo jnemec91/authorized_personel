@@ -1,9 +1,16 @@
+"""
+formater.py
+This module defines the change_string_format function, which formats a room number
+to a specific format.
+"""
 import re
 
 def change_string_format(s):
-    # Define the regex pattern to match the format "A-PR-500", "S-P3-240", "C-P12-100", "D1-P1-100", "D-P6-402b", "D1-S1-403a", etc.
+    """
+    finds all occurrences of the regex pattern in the string and replaces them with the new format.
+    """
     pattern = re.compile(r"\b([A-Z0-9]+-[A-Z0-9]+\d*)-(\d+[a-zA-Z]?)\b")
-    
+
     if isinstance(s, str):
         s = s.strip().upper()
         # Replace all matching patterns in the string

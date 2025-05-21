@@ -1,7 +1,7 @@
 import openpyxl as opx
 from reader import Reader
 from person import Person
-from Formater import change_string_format
+from formater import change_string_format
 
 class DataReader:
     def __init__(self, file_path, columns):
