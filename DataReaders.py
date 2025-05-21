@@ -1,6 +1,6 @@
 import openpyxl as opx
 from Reader import Reader
-from Person import Person
+from person import Person
 from Formater import change_string_format
 
 class DataReader:

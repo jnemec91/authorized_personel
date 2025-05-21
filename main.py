@@ -1,6 +1,6 @@
 from DataReaders import ReaderMapper, PersonMapper, AuthorizationMapper, ABILocationMapper, VelinMapper
 from Database import Database
-from Person import Person
+from person import Person
 from Reader import Reader
 from ExportData import ExportData
 from sqlite3 import IntegrityError

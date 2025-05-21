@@ -1,4 +1,4 @@
-from Person import Person
+from person import Person
 
 class Reader:
     def __init__(self,

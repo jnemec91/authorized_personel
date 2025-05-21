@@ -1,7 +1,7 @@
 # create database sqlite3
 
 import sqlite3
-from Person import Person
+from person import Person
 from Reader import Reader
 
 
