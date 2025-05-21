@@ -24,5 +24,5 @@ class Person:
     def __str__(self) -> str:
         return f'{self.person_number} - {self.first_name} {self.last_name}'
 
-    def __repr__(self -> str):
+    def __repr__(self) -> str:
         return f'Person:{self.person_number}'
