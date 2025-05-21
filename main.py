@@ -1,4 +1,4 @@
-from DataReaders import ReaderMapper, PersonMapper, AuthorizationMapper, ABILocationMapper, VelinMapper
+from data_readers import ReaderMapper, PersonMapper, AuthorizationMapper, ABILocationMapper, VelinMapper
 from Database import Database
 from export_data import ExportData
 from sqlite3 import IntegrityError
