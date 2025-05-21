@@ -1,5 +1,5 @@
 import openpyxl as opx
-from Reader import Reader
+from reader import Reader
 from person import Person
 from Formater import change_string_format
 

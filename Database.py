@@ -2,7 +2,7 @@
 
 import sqlite3
 from person import Person
-from Reader import Reader
+from reader import Reader
 
 
 class Database:
