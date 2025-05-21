@@ -144,7 +144,6 @@ class ExportData:
         export.save('output_documents/DepartmentsOutput.xlsx')
 
 if __name__ == '__main__':
-    """you can run this module directly to test the export functionality"""
     db = Database('database.db')
     export_workbook = ExportData(db)
     export_workbook.export_authorizations()
