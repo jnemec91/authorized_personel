@@ -5,7 +5,7 @@ to a specific format.
 """
 import re
 
-def change_string_format(s):
+def change_string_format(s: str) -> str:
     """
     finds all occurrences of the regex pattern in the string and replaces them with the new format.
     """
