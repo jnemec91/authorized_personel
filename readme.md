@@ -89,9 +89,9 @@ python ExportData.py
 ## Project Structure
 
 - `main.py` — Entry point for running the data processing pipeline.
-- `Database.py` — Handles SQLite database operations.
-- `DataReaders.py` — Reads and maps data from Excel files.
-- `ExportData.py` — Exports processed data to Excel.
-- `Person.py`, `Reader.py` — Data models.
-- `Formater.py` — Utility for formatting strings.
+- `database.py` — Handles SQLite database operations.
+- `data_readers.py` — Reads and maps data from Excel files.
+- `export_data.py` — Exports processed data to Excel.
+- `person.py`, `reader.py` — Data models.
+- `formater.py` — Utility for formatting strings.
 - `requirements.txt` — Python dependencies.
