@@ -6,7 +6,7 @@ to Excel files.
 import openpyxl as opx
 from unidecode import unidecode
 
-from Database import Database
+from database import Database
 
 
 class ExportData:

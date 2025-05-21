@@ -1,5 +1,5 @@
 from data_readers import ReaderMapper, PersonMapper, AuthorizationMapper, ABILocationMapper, VelinMapper
-from Database import Database
+from database import Database
 from export_data import ExportData
 from sqlite3 import IntegrityError
 
@@ -8,7 +8,8 @@ if __name__ == '__main__':
     reader_mapper = ReaderMapper('source_documents/export_readers.xlsx')
     readers = reader_mapper.get_readers()
 
-    abi_location_mapper = ABILocationMapper('source_documents/export_readers_app.xlsx', readers=readers)
+    abi_location_mapper = ABILocationMapper(
+        'source_documents/export_readers_app.xlsx', readers=readers)
     readers = abi_location_mapper.get_readers()
 
     velin_reader_mapper = VelinMapper('source_documents/export_readers_app.xlsx', readers=readers)
@@ -17,20 +18,22 @@ if __name__ == '__main__':
     person_mapper = PersonMapper('source_documents/export_employees.xlsx')
     personel = person_mapper.get_people()
 
-    authorization_mapper = AuthorizationMapper('source_documents/export_efas.xlsx', readers=readers, personel=personel)
+    authorization_mapper = AuthorizationMapper(
+        'source_documents/export_efas.xlsx', readers=readers, personel=personel)
     authorized_readers = authorization_mapper.get_authorizations()
 
-        
+
     print(f'Found {len(authorized_readers)} readers...')
 
     db = Database('database.db')
 
     print('Building database...')
-    progress = 0
+    progress = 0 # pylint: disable=C0103
     complete = len(readers)
     for reader in readers:
         progress += 1
-        print(f"Progress: {'█'*(progress//(complete // 10))}{' '*(10-progress//(complete // 10))} {progress}/{complete}", end="\r")
+        print(
+            f"Progress: {'█'*(progress//(complete // 10))}{' '*(10-progress//(complete // 10))} {progress}/{complete}", end="\r") # pylint: disable=C0301
 
         try:
             db.insert_reader(reader)
@@ -38,17 +41,17 @@ if __name__ == '__main__':
             #TODO: Add routine to update reader information
             # print(f'Reader already exists in database. {reader}')
             pass
-        
+
         for person in reader.authorized_personel:
             try:
                 db.insert_person(person)
             except IntegrityError:
-                # TODO: Add routine to update person information
+                #TODO: Add routine to update person information
                 # print(f'Person already exists in database. {person}')
                 pass
 
             db.insert_authorization(person, reader)
-    
+
     print('Database built.\n')
 
     export = ExportData(db)
